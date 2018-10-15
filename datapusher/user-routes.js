@@ -48,3 +48,4 @@ app.post('/crawlerdata', function(req, res){
         });
 
         res.status(200).send({'state': 'received your data'})
+})

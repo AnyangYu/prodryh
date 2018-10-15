@@ -1,11 +1,10 @@
 {
-  "secret": "ngEurope rocks!",
-  "mysql": {
-    "host": "47.99.166.155",
-    "user": "root",
-    "password": "307317yu",
-    "database": "ryh",
-    "port": 3306
-  }
+	"secret": "ngEurope rocks!",
+	"mysql": {
+		"host":"47.99.166.155",
+  		"user": "root",
+  		"password": "307317yu",
+  		"database": "ryh",
+  		"port": 3306
+ 	 }
 }
-~

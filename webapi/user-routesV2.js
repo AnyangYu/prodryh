@@ -8,7 +8,7 @@ var app = module.exports = express.Router();
 
 var pool = mysql.createPool(config.mysql)
 
-app.post('/login', function(req, res){
+app.post('/login', function(req, res){ 
 
   pool.getConnection(function(err, connection){
     if (err) throw err
@@ -22,28 +22,28 @@ app.post('/login', function(req, res){
 
       //Then:
       if (users.length>0){
-              res.status(200).send({
-                code: 200,
-                msg: "ÇëÇó³É¹¦",
-                user: {
-                        username: users[0].username,
-                        password: users[0].password,
-                        role: users[0].role,
-                        avatar: 'https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png',
-                        name: users[0].username
-                }
-              });
+	      res.status(200).send({ 
+	      	code: 200,
+	      	msg: "è¯·æ±‚æˆåŠŸ",
+	      	user: {
+	      		username: users[0].username,
+		        password: users[0].password,
+		        role: users[0].role,
+		        avatar: 'https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png',
+		    	name: users[0].username
+	      	}	        
+	      });
       }else{
-        res.status(200).send({
-                code: 500,
-                msg: 'ÕËºÅ»òÃÜÂë´íÎó'
-        });
-      }
+      	res.status(200).send({
+      		code: 500, 
+      		msg: 'è´¦å·æˆ–å¯†ç é”™è¯¯' 
+      	});
+      }   
     });
-  });
+  }); 
 });
 
-app.get('/user/listpage', function(req, res){
+app.get('/user/listpage', function(req, res){ 
   var page = req.query.page
   var start = (page-1)*20
   var end = page*20 -1
@@ -61,27 +61,27 @@ app.get('/user/listpage', function(req, res){
       //Then:
       var pagedUsers = []
       for(i=0; i<users.length; i++){
-        if(i>=start && i<=end){
-                pagedUsers.push(users[i])
-        }
+      	if(i>=start && i<=end){
+      		pagedUsers.push(users[i])
+      	}
       }
-              res.status(200).send({
-                code: 200,
-                msg: "ÇëÇó³É¹¦",
-                total: users.length,
-                users:  pagedUsers
-              });
+	      res.status(200).send({ 
+	      	code: 200,
+	      	msg: "è¯·æ±‚æˆåŠŸ",
+	      	total: users.length,
+	      	users:  pagedUsers  
+	      });       
     });
-  });
+  }); 
 });
 
-app.get('/user/edit', function(req, res){
+app.get('/user/edit', function(req, res){ 
   pool.getConnection(function(err, connection){
     if (err) throw err
     var username = req.query.username
-        var userstatus = req.query.userstatus
-        var percentage = req.query.percentage
-        var password = req.query.password
+	var userstatus = req.query.userstatus
+	var percentage = req.query.percentage
+	var password = req.query.password
 
     var sql = "update ryhuser2 set userstatus='"+userstatus+"', percentage='"+percentage+"', password='"+password+"' where username='"+username+"'";
     console.log(sql)
@@ -89,21 +89,21 @@ app.get('/user/edit', function(req, res){
       console.log(err)
       console.log(result)
       connection.release();
-              res.status(200).send({
-                code: 200,
-                msg: "±à¼­³É¹¦"
-              });
+	      res.status(200).send({ 
+	      	code: 200,
+	      	msg: "ç¼–è¾‘æˆåŠŸ"
+	      });       
     });
-  });
+  }); 
 });
 
-app.get('/user/add', function(req, res){
+app.get('/user/add', function(req, res){ 
   pool.getConnection(function(err, connection){
     if (err) throw err
     var username = req.query.username
-        var userstatus = req.query.userstatus
-        var percentage = req.query.percentage
-        var password = req.query.password
+	var userstatus = req.query.userstatus
+	var percentage = req.query.percentage
+	var password = req.query.password
 
     var sql = "insert into ryhuser2 values ('"+username+"', '"+password+"', "+percentage+" ,'source', 'system', "+ userstatus+", NOW())";
     console.log(sql)
@@ -111,16 +111,16 @@ app.get('/user/add', function(req, res){
       console.log(err)
       console.log(result)
       connection.release();
-              res.status(200).send({
-                code: 200,
-                msg: "ĞÂÔö³É¹¦"
-              });
+	      res.status(200).send({ 
+	      	code: 200,
+	      	msg: "æ–°å¢æˆåŠŸ"
+	      });       
     });
-  });
+  }); 
 });
 
 //2.
-app.get('/user/list', function(req, res){
+app.get('/user/list', function(req, res){ 
   var page = req.query.page
   var start = (page-1)*20
   var end = page*20 -1
@@ -132,9 +132,9 @@ app.get('/user/list', function(req, res){
     if (err) throw err
     //var sql = "select * from ryhuser2"
 
-        var sql = "select username, DATE_FORMAT(registertime,'%m-%d-%Y') as registertime, phonenumber from ryhdata2 where username='"+username+"' order by registertime"
+	var sql = "select username, DATE_FORMAT(registertime,'%m-%d-%Y') as registertime, phonenumber from ryhdata2 where username='"+username+"' order by registertime"
     if (rtime !== ''){
-        var sql = "select username, DATE_FORMAT(registertime,'%m-%d-%Y') as registertime, phonenumber from ryhdata2 where username='"+username+"' and DATE_FORMAT(date_sub(registertime, interval 8 hour),'%m-%d-%Y')=DATE_FORMAT('"+rtime+"','%m-%d-%Y') order by registertime"
+    	var sql = "select username, DATE_FORMAT(registertime,'%m-%d-%Y') as registertime, phonenumber from ryhdata2 where username='"+username+"' and DATE_FORMAT(date_sub(registertime, interval 8 hour),'%m-%d-%Y')=DATE_FORMAT('"+rtime+"','%m-%d-%Y') order by registertime"
     }
     console.log(sql)
     connection.query(sql, function(err, result){
@@ -146,16 +146,16 @@ app.get('/user/list', function(req, res){
       //Then:
       var pageddata = []
       for(i=0; i<data.length; i++){
-        if(i>=start && i<=end){
-                pageddata.push(data[i])
-        }
+      	if(i>=start && i<=end){
+      		pageddata.push(data[i])
+      	}
       }
-              res.status(200).send({
-                code: 200,
-                msg: "ÇëÇó³É¹¦",
-                total: data.length,
-                users:  pageddata
-              });
+	      res.status(200).send({ 
+	      	code: 200,
+	      	msg: "è¯·æ±‚æˆåŠŸ",
+	      	total: data.length,
+	      	users:  pageddata  
+	      });       
     });
   });
 });
