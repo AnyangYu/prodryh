@@ -1,0 +1,22 @@
+{
+  "name": "origindata",
+  "version": "0.1.0",
+  "description": "Get data from external data from web crawler",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "tbd"
+  },
+  "author": "Martin Gontvonikas",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.4",
+    "mysql": "^2.16.0",
+    "node-datetime": "^2.1.2"
+  }
+}
