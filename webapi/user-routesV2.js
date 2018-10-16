@@ -119,8 +119,27 @@ app.get('/user/add', function(req, res){
   }); 
 });
 
+app.post('/user/changePassword', function (req, res){
+  var username = req.body.username
+  var password = req.body.password
+  console.log(username)
+  console.log(password)
+
+  pool.getConnection(function (err, connection){
+    if (err) throw err
+    var sql = "update ryhuser2 set password = '"+password+"' where username='"+username+"'"
+    console.log(sql)
+    connection.query(sql, function (err, result){
+      res.status(200).send({
+        code: 200,
+        msg: '修改密码成功'
+      })
+    })
+  })
+})
+
 //2.
-app.get('/user/list', function(req, res){ 
+app.get('/data/list', function(req, res){ 
   var page = req.query.page
   var start = (page-1)*20
   var end = page*20 -1
