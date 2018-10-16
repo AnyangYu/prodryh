@@ -40,7 +40,7 @@
 	</section>
 </template>
 <script>
-import { getUserList } from '../../api/api'
+import { getDataList } from '../../api/api'
 export default {
   data () {
     return {
@@ -55,7 +55,7 @@ export default {
     }
   },
   methods: {
-    getUser: function () {
+    getData: function () {
       this.page = 1
       var logginuser = sessionStorage.getItem('user')
       console.log(logginuser)
@@ -67,7 +67,7 @@ export default {
       }
       console.log(para)
       this.loading = true
-      getUserList(para).then((res) => {
+      getDataList(para).then((res) => {
         this.users = res.data.users
         this.total = res.data.total
         this.loading = false
@@ -85,7 +85,7 @@ export default {
       }
       console.log(para)
       this.loading = true
-      getUserList(para).then((res) => {
+      getDataList(para).then((res) => {
         this.users = res.data.users
         this.total = res.data.total
         this.loading = false
@@ -96,7 +96,7 @@ export default {
     }
   },
   mounted () {
-    this.getUser()
+    this.getData()
   }
 }
 </script>

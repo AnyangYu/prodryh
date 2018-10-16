@@ -1,57 +1,72 @@
 <template>
-	<el-row class="container">
-		<el-col :span="24" class="header">
-			<el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
-				{{collapsed?'':sysName}}
-			</el-col>			
-			<el-col :span="4" class="userinfo">
-				<el-dropdown trigger="hover">
-					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
-					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>设置</el-dropdown-item>
-						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
-					</el-dropdown-menu>
-				</el-dropdown>
-			</el-col>
-		</el-col>
-		<el-col :span="24" class="main">
-			<aside :class="collapsed?'menu-collapsed':'menu-expanded'">
-				<!--导航菜单-->
-				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
-					 unique-opened router v-show="!collapsed">					 
-					<el-submenu :index="2" v-if="this.sysUserRole === 'admin'">
-						<template slot="title"><i :class="$router.options.routes[2].iconCls"></i>{{$router.options.routes[2].name}}</template>
-						<el-menu-item v-for="child in $router.options.routes[2].children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
-					</el-submenu>	
+  <div>
+		<el-row class="container">
+			<el-col :span="24" class="header">
+				<el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
+					{{collapsed?'':sysName}}
+				</el-col>			
+				<el-col :span="4" class="userinfo">
+					<el-dropdown trigger="hover">
+						<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
+						<el-dropdown-menu slot="dropdown">
+							<el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
+							<el-dropdown-item divided @click.native="changePassword">修改密码</el-dropdown-item>							
+						</el-dropdown-menu>
+					</el-dropdown>
+				</el-col>
+			</el-col>	
+			<el-col :span="24" class="main">
+				<aside :class="collapsed?'menu-collapsed':'menu-expanded'">
+					<!--导航菜单-->
+					<el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
+						unique-opened router v-show="!collapsed">					 
+						<el-submenu :index="2" v-if="this.sysUserRole === 'admin'">
+							<template slot="title"><i :class="$router.options.routes[2].iconCls"></i>{{$router.options.routes[2].name}}</template>
+							<el-menu-item v-for="child in $router.options.routes[2].children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
+						</el-submenu>	
 
-					<el-submenu :index="3" v-if="this.sysUserRole === 'source'">
-						<template slot="title"><i :class="$router.options.routes[3].iconCls"></i>{{$router.options.routes[3].name}}</template>
-						<el-menu-item v-for="child in $router.options.routes[3].children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
-					</el-submenu>				
-				</el-menu>
-			</aside>
-			<section class="content-container">
-				<div class="grid-content bg-purple-light">
-					<el-col :span="24" class="breadcrumb-container">
-						<strong class="title">{{$route.name}}</strong>
-						<el-breadcrumb separator="/" class="breadcrumb-inner">
-							<el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
-								{{ item.name }}
-							</el-breadcrumb-item>
-						</el-breadcrumb>
-					</el-col>
-					<el-col :span="24" class="content-wrapper">
-						<transition name="fade" mode="out-in">
-							<router-view></router-view>
-						</transition>
-					</el-col>
-				</div>
-			</section>
-		</el-col>
-	</el-row>
+						<el-submenu :index="3" v-if="this.sysUserRole === 'source'">
+							<template slot="title"><i :class="$router.options.routes[3].iconCls"></i>{{$router.options.routes[3].name}}</template>
+							<el-menu-item v-for="child in $router.options.routes[3].children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
+						</el-submenu>				
+					</el-menu>
+				</aside>
+				<section class="content-container">
+					<div class="grid-content bg-purple-light">
+						<el-col :span="24" class="breadcrumb-container">
+							<strong class="title">{{$route.name}}</strong>
+							<el-breadcrumb separator="/" class="breadcrumb-inner">
+								<el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
+									{{ item.name }}
+								</el-breadcrumb-item>
+							</el-breadcrumb>
+						</el-col>
+						<el-col :span="24" class="content-wrapper">
+							<transition name="fade" mode="out-in">
+								<router-view></router-view>
+							</transition>
+						</el-col>
+					</div>
+				</section>
+			</el-col>
+		</el-row>
+	<!--修改密码界面-->
+		<el-dialog title="修改密码" v-model="changePasswordFormVisible" :close-on-click-modal="false">
+			<el-form :model="newPassword" label-width="80px" :rules="changePasswordRules" ref="changePasswordForm">		
+				<el-form-item label="新密码">
+					<el-input v-model="newPassword"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="changePasswordFormVisible = false">取消</el-button>
+				<el-button type="primary" @click.native="submitChangePassword" :loading="changePasswordLoading">提交</el-button>
+			</div>
+		</el-dialog>
+	</div>
 </template>
 
 <script>
+  import { changePassword } from '../api/api'
   export default {
     data () {
       return {
@@ -59,7 +74,16 @@
         collapsed: false,
         sysUserName: '',
         sysUserAvatar: '',
-        sysUserRole: ''
+        sysUserRole: '',
+        // change password form
+        changePasswordFormVisible: false,
+        changePasswordLoading: false,
+        newPassword: '',
+        changePasswordRules: {
+          name: [
+            { required: true, message: '请输入新密码', trigger: 'blur' }
+          ]
+        }
       }
     },
     methods: {
@@ -83,7 +107,32 @@
           sessionStorage.removeItem('user')
           _this.$router.push('/login')
         }).catch(() => {
-
+        })
+      },
+      // 修改密码
+      changePassword: function () {
+        this.changePasswordFormVisible = true
+      },
+      submitChangePassword: function () {
+        this.$refs.changePasswordForm.validate((valid) => {
+          if (valid) {
+            this.$confirm('确认修改密码吗？', '提示', {}).then(() => {
+              this.changePasswordLoading = true
+              let para = {
+                username: JSON.parse(sessionStorage.getItem('user')).username,
+                password: this.newPassword
+              }
+              changePassword(para).then((res) => {
+                this.changePasswordLoading = false
+                this.$message({
+                  message: '修改密码成功',
+                  type: 'success'
+                })
+                this.$refs['changePasswordForm'].resetFields()
+                this.changePasswordFormVisible = false
+              })
+            })
+          }
         })
       },
       collapse: function () {
