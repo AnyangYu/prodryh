@@ -19,6 +19,7 @@ app.post('/crawlerdata', function(req, res){
                         var percentages = JSON.parse(JSON.stringify(result))
                         console.log(percentages)
                         if (percentages.length > 0) percentage = percentages[0].percentage
+			else percentage = 100
                         connection.release();
 
                         //Use percentange to filter
@@ -34,7 +35,7 @@ app.post('/crawlerdata', function(req, res){
                                 }
                                 pool.getConnection(function(err, connection){
                                         if (err) throw err
-                                        var sql = "insert into ryhdata2 values ('"+req.body.username+"' ,'"+req.body.phonenumber+"', '"+req.body.registertime+"',"+ isPresent+", '"+datetime.create().format('Y-m-d H:M:S')+"')";
+                                        var sql = "insert into ryhdata2 (username, personname, phonenumber, registertime, ispresent, createdatetime) values ('"+req.body.username+"' ,'"+req.body.personname+"', '"+req.body.phonenumber+"', '"+req.body.registertime+"',"+ isPresent+", NOW()) on duplicate key update phonenumber='"+req.body.phonenumber+"'";
                                         console.log(sql);
                                         connection.query(sql, function(err, result){
                                                console.log('err: ')

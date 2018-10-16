@@ -105,7 +105,7 @@ app.get('/user/add', function(req, res){
 	var percentage = req.query.percentage
 	var password = req.query.password
 
-    var sql = "insert into ryhuser2 values ('"+username+"', '"+password+"', "+percentage+" ,'source', 'system', "+ userstatus+", NOW())";
+    var sql = "insert into ryhuser2 (username, password, percentage, role, registerby, userstatus, createtime) values ('"+username+"', '"+password+"', "+percentage+" ,'source', 'system', "+ userstatus+", NOW())";
     console.log(sql)
     connection.query(sql, function(err, result){
       console.log(err)
@@ -132,9 +132,9 @@ app.get('/user/list', function(req, res){
     if (err) throw err
     //var sql = "select * from ryhuser2"
 
-	var sql = "select username, DATE_FORMAT(registertime,'%m-%d-%Y') as registertime, phonenumber from ryhdata2 where username='"+username+"' order by registertime"
+	var sql = "select username, DATE_FORMAT(registertime,'%m-%d-%Y') as registertime, phonenumber from ryhdata2 where username='"+username+"' and ispresent=1 order by registertime"
     if (rtime !== ''){
-    	var sql = "select username, DATE_FORMAT(registertime,'%m-%d-%Y') as registertime, phonenumber from ryhdata2 where username='"+username+"' and DATE_FORMAT(date_sub(registertime, interval 8 hour),'%m-%d-%Y')=DATE_FORMAT('"+rtime+"','%m-%d-%Y') order by registertime"
+    	var sql = "select username, DATE_FORMAT(registertime,'%m-%d-%Y') as registertime, phonenumber from ryhdata2 where username='"+username+"' and ispresent=1 and DATE_FORMAT(date_sub(registertime, interval 8 hour),'%m-%d-%Y')=DATE_FORMAT('"+rtime+"','%m-%d-%Y') order by registertime"
     }
     console.log(sql)
     connection.query(sql, function(err, result){
