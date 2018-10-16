@@ -12,7 +12,7 @@
 					></el-date-picker>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" v-on:click="getUser">查询</el-button>
+					<el-button type="primary" v-on:click="getData">查询</el-button>
 				</el-form-item>
 				<div><a>总数：{{ total }}</a></div>
 			</el-form>
