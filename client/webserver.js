@@ -12,7 +12,7 @@ app.use('/', (req, res)=>{
 })
 
 
-app.listen(81,() => {
+app.listen(80,() => {
     console.log('app listening on port 80.');
 })
 
