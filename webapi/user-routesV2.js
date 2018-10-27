@@ -153,7 +153,7 @@ app.get('/data/list', function(req, res){
 
 	var sql = "select username, DATE_FORMAT(registertime,'%m-%d-%Y') as registertime, phonenumber from ryhdata2 where username='"+username+"' and ispresent=1 order by registertime"
     if (rtime !== ''){
-    	var sql = "select username, DATE_FORMAT(registertime,'%m-%d-%Y') as registertime, phonenumber from ryhdata2 where username='"+username+"' and ispresent=1 and DATE_FORMAT(date_sub(registertime, interval 8 hour),'%m-%d-%Y')=DATE_FORMAT('"+rtime+"','%m-%d-%Y') order by registertime"
+    	var sql = "select username, DATE_FORMAT(registertime,'%m-%d-%Y') as registertime, phonenumber from ryhdata2 where username='"+username+"' and ispresent=1 and DATE_FORMAT(date_sub(registertime, interval 1 day),'%m-%d-%Y')=DATE_FORMAT('"+rtime+"','%m-%d-%Y') order by registertime"
     }
     console.log(sql)
     connection.query(sql, function(err, result){
@@ -175,6 +175,47 @@ app.get('/data/list', function(req, res){
 	      	total: data.length,
 	      	users:  pageddata  
 	      });       
+    });
+  });
+});
+
+//2.
+app.get('/data/list2', function(req, res){ 
+  var page = req.query.page
+  var start = (page-1)*20
+  var end = page*20 -1
+
+  var rtime = req.query.registertime
+  var username = req.query.username
+  console.log(rtime)
+  pool.getConnection(function(err, connection){
+    if (err) throw err
+    //var sql = "select * from ryhuser2"
+
+  var sql = "select username, DATE_FORMAT(registertime,'%m-%d-%Y') as registertime, phonenumber from ryhdata2 where username='"+username+"' and ispresent=1 order by registertime"
+    if (rtime !== ''){
+      var sql = "select username, DATE_FORMAT(registertime,'%m-%d-%Y') as registertime, phonenumber from ryhdata2 where username='"+username+"' and ispresent=1 and DATE_FORMAT(date_sub(registertime, interval 8 hour),'%m-%d-%Y')=DATE_FORMAT('"+rtime+"','%m-%d-%Y') order by registertime"
+    }
+    console.log(sql)
+    connection.query(sql, function(err, result){
+      console.log(err)
+      console.log(result)
+      var data = JSON.parse(JSON.stringify(result))
+      connection.release();
+
+      //Then:
+      var pageddata = []
+      for(i=0; i<data.length; i++){
+        if(i>=start && i<=end){
+          pageddata.push(data[i])
+        }
+      }
+        res.status(200).send({ 
+          code: 200,
+          msg: "请求成功",
+          total: data.length,
+          users:  pageddata  
+        });       
     });
   });
 });
